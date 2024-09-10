@@ -52,11 +52,9 @@ app.post(
   async (request) => {
     const { goalId } = request.body;
 
-    const result = await createGoalCompletion({
+    await createGoalCompletion({
       goalId: goalId,
     });
-
-    return result;
   }
 );
 

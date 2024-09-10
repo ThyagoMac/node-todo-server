@@ -13,7 +13,7 @@ export async function createGoalCompletion({
   const firstDayOfWeek = dayjs().startOf("week").toDate();
   const lastDayOfWeek = dayjs().endOf("week").toDate();
 
-  const goalsCompletetionCounts = db.$with("goal_completetion_counts").as(
+  const goalsCompletetionCounts = db.$with("goal_completion_counts").as(
     db
       .select({
         goalId: goalCompletions.goalId,
@@ -24,7 +24,7 @@ export async function createGoalCompletion({
         and(
           gte(goalCompletions.createdAt, firstDayOfWeek),
           lte(goalCompletions.createdAt, lastDayOfWeek),
-          eq(goalCompletions.id, goalId)
+          eq(goalCompletions.goalId, goalId)
         )
       )
       .groupBy(goalCompletions.goalId)
@@ -47,8 +47,6 @@ export async function createGoalCompletion({
     .limit(1);
 
   const { completionCount, desiredWeeklyFrequency } = result[0];
-
-  if (result[0]) return result[0];
 
   if (completionCount >= desiredWeeklyFrequency) {
     throw new Error("Goal already completed this week");
